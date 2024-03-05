@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Creating Pet Owner Account</title>
+    <link rel="stylesheet" href="css/styles.css"><!--copy this line to every new html file created-->
+  </head>
+
+  <body>
+    <h1>Pet Adoption Website</h1>
+    <h3>Pet Owner/Organization Sign In</h3>
+    <form>
+       <label for="fname">First Name</label>
+       <input id="fname" required type="text"> 
+
+       <label for="lname">Last Name</label>
+       <input id="lname" required type="text"> 
+
+       <label for="uname">Username</label>
+       <input id="uname" required type="text"> 
+
+       <label for="pword">Password</label>
+       <input id="pword" required type="password">
+       
+       <label for="bl">Business Location</label>
+       <input id="bl" required type="text">
+
+      <div class="col-75">
+        <label for="pr">Province</label>
+        <select name="province" id="province">
+        <option value="Select Province"> Select Province</option>
+        <option value="ON">Ontario</option>
+        <option value="NL">Newfoundland and Labrador</option>
+        <option value="PE">Prince Edward Island</option>
+        <option value="NS">Nova Scotia</option>
+        <option value="NB">New Brunswick</option>
+        <option value="QC">Quebec</option>
+        <option value="MB">Manitoba</option>
+        <option value="SK">Saskatchewan</option>
+        <option value="AB">Alberta</option>
+        <option value="BC">British Colombia</option>
+        <option value="YT">Yukon</option>
+        <option value="NT">Northwest Territories</option>
+        <option value="NU">Nunavut</option>
+        </select>
+    </div>
+
+       <label for="pc">Postal Code</label>
+       <input id="pc" required type="text" placeholder="A1A 1A1">
+
+       <label for="pnum">Phone Number</label>
+       <input id="pnum" required type="tel">
+    </form>
+    <!-- insert a pop up notification to verify if the user is done/correct-->
+      <a href="animal-info.html" class="btnForms"> continue</a>
+  </body>
+</html>

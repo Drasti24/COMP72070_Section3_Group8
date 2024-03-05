@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Animal Information</title>
+    <link rel="stylesheet" href="css/styles.css"> <!--copy this line to every new html file created-->
+  </head> 
+
+  <body> 
+    <h1>Pet Adoption Website</h1>
+    <h3>Animal Information Registration</h3>
+    <form>
+        <p> Which animal do you sell?</p>
+        <fieldset>
+            <!-- <legend>Which animal do you sell?</legend> -->
+            <input id="dogs" name="radiobutton" type="radio" value="Dogs">
+            <label for="dogs"> Dogs</label>
+            
+            <input id="cats" name="radiobutton" type="radio" value="Cats">
+            <label for="cats"> Cats</label>
+            
+            <input id="both" name="radiobutton" type="radio" value="Both">
+            <label for="both"> Both</label>
+           
+        </fieldset>
+
+    </form>
+    <form>
+        <p>Are they all vaccinated?</p>
+        <fieldset>
+            <input id="no" name="radiobutton" type="radio" value="No">
+            <label for="no"> No</label>
+            
+            <input id="yes" name="radiobutton" type="radio" value="Yes">
+            <label for="yes"> Yes</label>
+            
+            <input id="some" name="radiobutton" type="radio" value="Some">
+            <label for="some"> Some</label>
+        </fieldset>
+    </form>
+    <!-- insert a pop up notification to verify if the user is done/correct-->
+      <a href="posts.html" class="btnForms"> Finish</a>
+  </body>
+</html>

@@ -1,0 +1,189 @@
+/*comments
+color palette
+Teal buttons
+offwhite  #f6f6f6;
+*/
+
+/*GLOBAL STYLES
+-------------------------------------------*/
+body {
+    height:1000px;
+    background-color: white;
+}
+
+input[type=text], input[type=password], input[type=tel], select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid black;
+    border-radius: 6px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+a.btnForms:link, a.btnForms:visited { /*for buttons in forms*/
+    width: 5%;
+    background-color: white;
+    color: black;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #008080;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+  }
+
+  a.btnForms:hover, a.btnForms:active { /*for some buttons in forms*/
+    background-color: #008080;
+    color:white;
+  }
+
+input[type=text]:focus, input[type=password]:focus, input[type=tel]:focus, select:focus {
+    border: 2px solid green;
+  }
+
+label{
+    padding:2px 2px 2px 0;
+    display: inline-block;
+}
+
+a.btns:link, a.btns:visited { /*for some buttons not in forms*/
+    width: 5%;
+    background-color: white;
+    color: black;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #008080;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+a.btns:hover, a.btns:active { /*for some buttons not in forms*/
+    background-color: #008080;
+    color:white;
+  }
+
+
+/*HOME STYLES
+-------------------------------------------*/
+.home{
+    background-image: url(../images/home-bg-photo.png);
+    background-size:125%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: scroll;
+}
+
+.HomeContainer{
+  text-align: center;
+}
+
+.h1Font{
+    color:black;
+    margin-bottom: 70px;
+}
+
+p.FontColor{
+    color:white;
+}
+
+/*REGISTRATION/LOGIN STYLES
+-------------------------------------------*/
+.col-75 {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    width: 100%;
+    margin: 8px 0;
+  }
+
+  a.btnLong:link, a.btnLong:visited { /*for long buttons in register*/
+    width: 25%;
+    background-color: white;
+    color: black;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #008080;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    margin: 0 auto;
+
+}
+
+a.btnLong:hover, a.btnLong:active { /*for long buttons in register*/
+    background-color: #008080;
+    color:white;
+  }
+
+
+/*POSTS & MESSAGING STYLES
+-------------------------------------------*/
+ul.HorzNavBar{ /*for the posts page horizontal navigation bar*/
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #008080;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+li.HorzNavBarItem{
+  float:left;
+  font-size: 18px; 
+}
+
+li a, .Setting {
+  display: block;
+  color:white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.Setting:hover:not(.active){
+  background-color: #66CCCC;
+}
+
+.active{
+  background-color: black;
+}
+
+/*REGISTER STYLES
+-------------------------------------------*/
+.registerBG{
+  background-image: url(../images/register-bg-photo.png);
+    background-size:125%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: scroll;
+}
+
+/* THANK YOU STYLES
+-------------------------------------------*/
+.backgrnd{
+  background-image: url(../images/ThankYou-bg-photo.png);
+  background-size:40%;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+
+
+.pTitle{
+  color: black;
+ text-align: center;
+ font-size: 80px;
+ margin-top: 200px;
+}
