@@ -5,11 +5,26 @@
 #include <windows.networking.sockets.h>
 #pragma comment(lib, "Ws2_32.lib")
 
+/*
+* The enumerations are used to specify the type of
+* request the client/server are expecting.
+* 
+* The header is deserialized when a packet is received, and is then
+* evaluated in the main function.
+* 
+* Enumerations are defined as project specific and tell the client/server
+* what action is being done by the user.
+*/
 enum requestType { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_ACT, LOGUP, POST, UNKNOWN };
 
 class Packet
 {
 public:
+    /*
+    * The header tells the receiving end everything it needs to know
+    * to decipher the data. It includes attributes for all parameters
+    * (the data sent within each struct).
+    */
     struct packetHeader
     {
         unsigned char sourceAddr;
@@ -53,6 +68,14 @@ public:
 
     struct petInformation
     {
+        /*
+        * 0 - dog.
+        * 1 - cat.
+        * 2 - both.
+        *
+        * A boolean was originally chosen for this, but as its values
+        * can only be 1 or 0, it was changed to an unsigned int instead.
+        */
         unsigned int animalType;
         bool vaccinationStatus;
         unsigned int age;
@@ -68,6 +91,17 @@ public:
     char* bufferOfReceivedData = nullptr;
     char* dataToBeSent = nullptr;
 
+    /*
+    * Each of these constructors are used to initialize
+    * various struct objects depending on what request is issued
+    * by the user. Each has the necessary information that the header
+    * needs in order to relay to the client, and the actual data itself
+    * to be serialized.
+    *
+    * A default constructor must also be provided.
+    */
+
+    // Default constructor to be used for non-parameterized constructors.
     Packet() {};
 
 
@@ -124,6 +158,15 @@ public:
 
     }
 
+    /*
+    * This function is to be used by the client.
+    * The client Must tell the server what the size of the image is.
+    * 
+    * Call this function before creating an instance of a packet
+    * and serializing data for a post.
+    * 
+    * IMPORTANT: Remember to clean memory after serializing/deserializing!
+    */
     size_t imageData(char* imageBuffer)
     {
         std::ifstream imageFile(imageBuffer, std::ios::binary | std::ios::ate);
@@ -150,10 +193,24 @@ public:
         this->pktHeader.lengthOfPostContent = postContent.length();
     }
 
-
+    /*
+    * All of these functions serialize and deserialize data. The way they work is
+    * by copying data back and forth from memory. When serializing, we are copying into
+    * a buffer.
+    *
+    * When deserializing, we are retreiving data from a buffer to a struct object
+    * that is subsequently saved in a database.
+    */
 
     char* serializeDataForLogin(unsigned int* totalSize)
     {
+    /*
+    * If the buffer has been used, empty it to
+    * create a new buffer to return.
+    *
+    * Done to prevent memory leaks and segmentation
+    * faults (buffer overflows).
+    */
         if (this->dataToBeSent) {
             delete this->dataToBeSent;
         }
