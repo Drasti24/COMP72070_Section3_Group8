@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += uitools
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -7,14 +8,29 @@ CONFIG += c++17
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-INCLUDEPATH += "C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\cppwinrt\winrt"
-win32: LIBS += -lWs2_32
+# INCLUDEPATH += "C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\cppwinrt\winrt"
+# win32: LIBS += -lWs2_32
+
+# Get the path to the Windows SDK include directory
+win_sdk_include = $$system(echo %WindowsSdkDir%)
+
+# Specify the location of Windows SDK headers
+INCLUDEPATH += "C:/Program Files (x86)/Windows Kits/10/Include"
+INCLUDEPATH += "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22000.0/um"
+INCLUDEPATH += "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22000.0/shared"
+INCLUDEPATH += "C:/Program Files (x86)/Windows Kits/10/Include/10.0.22000.0/cppwinrt/winrt"
+
+# Specify the location of Windows SDK libraries
+win32: {
+    win_sdk_lib = "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.22000.0/um/x64"
+    LIBS += -L$$win_sdk_lib -lWs2_32
+}
 
 SOURCES += \
-    ClientNetworking.cpp \
     Login.cpp \
     MainGUI.cpp \
     Message.cpp \
+    Packet.cpp \
     PetAdopter.cpp \
     PetAdopterWindow.cpp \
     PetPost.cpp \
@@ -28,9 +44,9 @@ SOURCES += \
     postpagewindow.cpp
 
 HEADERS += \
-    ClientNetworking.h \
     Login.h \
     Message.h \
+    Packet.h \
     PetAdopter.h \
     PetAdopterWindow.h \
     PetPost.h \
