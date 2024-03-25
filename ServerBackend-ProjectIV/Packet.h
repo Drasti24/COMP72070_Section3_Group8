@@ -34,6 +34,7 @@ public:
         unsigned int lengthOfLastName;
         unsigned int lengthOfUsername;
         unsigned int lengthOfHashedPassword;
+        unsigned int lengthOfAdopterBio;
         unsigned int lengthOfBusinessAddress;
         unsigned int lengthOfProvince;
         unsigned int lengthOfPostalCode;
@@ -65,6 +66,18 @@ public:
         unsigned long int businessPhone;
         unsigned int licenseNumber;
     } lUOwners;
+    /*
+    * Structure holding the sign up
+    * information of user bio.
+    */
+    struct logUpAdopters
+    {
+        std::string firstName;
+        std::string lastName;
+        std::string username;
+        std::string hashedPassword;
+        std::string userBio;
+    }lUAdopters;
 
     struct petInformation
     {
@@ -158,6 +171,26 @@ public:
 
     }
 
+    Packet(std::string firstName, std::string lastName, std::string username, std::string hashedPassword,
+        std::string userBio)
+    {
+        this->lUAdopters.firstName = firstName;
+        this->lUAdopters.lastName = lastName;
+        this->lUAdopters.username = username;
+        this->lUAdopters.hashedPassword = hashedPassword;
+        this->lUAdopters.userBio = userBio;
+
+        /*
+        * Just like with the rest of the constructors,
+        * these attributes tell the receiving end everything
+        * it needs to know to deserialize data by filling in
+        * needed parameters within the packet header.
+        */
+        this->pktHeader.lengthOfUsername = username.length();
+        this->pktHeader.lengthOfHashedPassword = hashedPassword.length();
+        this->pktHeader.lengthOfAdopterBio = userBio.length();
+    }
+
     /*
     * This function is to be used by the client.
     * The client Must tell the server what the size of the image is.
@@ -217,7 +250,10 @@ public:
 
         *totalSize = sizeof(packetHeader) + pktHeader.lengthOfUsername + pktHeader.lengthOfHashedPassword;
         dataToBeSent = new char[*totalSize];
-
+        /*
+        * initializes other values in memory to 0 to avoid
+        * garbage values. Useful for debugging.
+        */
         memset(dataToBeSent, 0, *totalSize);
 
         memcpy(dataToBeSent, &pktHeader, sizeof(packetHeader));
@@ -228,6 +264,41 @@ public:
         memcpy(dataToBeSent + offset, loginInfo.hashedPassword.c_str(), pktHeader.lengthOfHashedPassword);
 
         return dataToBeSent;
+    }
+
+    char* serializeDataForLogUpAdopters(unsigned int* totalSize)
+    {
+        if (this->dataToBeSent) {
+            delete this->dataToBeSent;
+        }
+
+        *totalSize = sizeof(packetHeader) + pktHeader.lengthOfName, pktHeader.lengthOfLastName;
+        *totalSize += pktHeader.lengthOfUsername + pktHeader.lengthOfHashedPassword + pktHeader.lengthOfAdopterBio;
+
+        dataToBeSent = new char[*totalSize];
+
+        memset(dataToBeSent, 0, *totalSize);
+
+        memcpy(dataToBeSent, &pktHeader, sizeof(packetHeader));
+        unsigned int offset = sizeof(packetHeader);
+
+        memcpy(dataToBeSent + offset, lUAdopters.firstName.c_str(), pktHeader.lengthOfName);
+        offset += pktHeader.lengthOfName;
+
+        memcpy(dataToBeSent + offset, lUAdopters.lastName.c_str(), pktHeader.lengthOfLastName);
+        offset += pktHeader.lengthOfLastName;
+
+        memcpy(dataToBeSent + offset, lUAdopters.username.c_str(), pktHeader.lengthOfUsername);
+        offset += pktHeader.lengthOfUsername;
+
+        memcpy(dataToBeSent + offset, lUAdopters.hashedPassword.c_str(), pktHeader.lengthOfHashedPassword);
+        offset += pktHeader.lengthOfHashedPassword;
+
+        memcpy(dataToBeSent + offset, lUAdopters.userBio.c_str(), pktHeader.lengthOfAdopterBio);
+        offset += pktHeader.lengthOfAdopterBio;
+
+        return dataToBeSent;
+        
     }
 
     char* serializeDataForPetInformation(unsigned int* totalSize)
@@ -252,26 +323,7 @@ public:
         return dataToBeSent;
     }
 
-    loginInformation deserializeDataForLogin(char** receivedData)
-    {
-        memcpy(&pktHeader, *receivedData, sizeof(packetHeader));
-
-        unsigned int offset = sizeof(packetHeader);
-        loginInfo.username = std::string(*receivedData + offset, pktHeader.lengthOfUsername);
-        offset += pktHeader.lengthOfUsername;
-        loginInfo.hashedPassword = std::string(*receivedData + offset, pktHeader.lengthOfHashedPassword);
-
-        return loginInfo;
-    }
-
-    packetHeader deserializeDataForHeader(char** receivedData)
-    {
-        memcpy(&pktHeader, *receivedData, sizeof(packetHeader));
-
-        return pktHeader;
-    }
-
-    char* serializeDataForLogUp(unsigned int* totalSize)
+    char* serializeDataForLogUpSellers(unsigned int* totalSize)
     {
         *totalSize = sizeof(packetHeader);
         *totalSize += pktHeader.lengthOfName + pktHeader.lengthOfLastName + pktHeader.lengthOfUsername;
@@ -325,8 +377,64 @@ public:
         return dataToBeSent;
     }
 
-    logUpOwners deserializeDataForLogUp(char** receivedData)
+    char* serializeDataForPost(unsigned int* totalSize)
     {
+        *totalSize = sizeof(packetHeader) + pktHeader.lengthOfPostTitle + pktHeader.lengthOfPostContent;
+        dataToBeSent = new char[*totalSize];
+        unsigned int offset = 0;
+
+        memset(dataToBeSent, 0, *totalSize);
+
+        memcpy(dataToBeSent, &pktHeader, sizeof(packetHeader));
+        offset += sizeof(packetHeader);
+
+        memcpy(dataToBeSent + offset, postParams.postTitle.c_str(), pktHeader.lengthOfPostTitle);
+        offset += pktHeader.lengthOfPostTitle;
+
+        memcpy(dataToBeSent + offset, postParams.postContent.c_str(), pktHeader.lengthOfPostContent);
+        offset += pktHeader.lengthOfPostContent;
+
+        memcpy(dataToBeSent + offset, postParams.imageBuffer, pktHeader.sizeOfImageBuffer);
+
+        return dataToBeSent;
+    }
+
+    /*
+    * IMPORTANT: Call this function on both client and server to know what the receiving end
+    * will be processing (what action the user wants to take). Failure to call this function
+    * will result in enumeration issues with the packet header.
+    */
+    packetHeader deserializeDataForHeader(char** receivedData)
+    {
+        memcpy(&pktHeader, *receivedData, sizeof(packetHeader));
+
+        return pktHeader;
+    }
+
+    loginInformation deserializeDataForLogin(char** receivedData)
+    {
+        /*
+        * Below is an example of what I mean, you cannot deserialize the contents
+        * of the packet without first revealing the necessary attributes from the
+        * header to the program.
+        * 
+        * Remember to call this function and pass the parameter appropriately
+        * for each use case, this will prevent many issues!
+        */
+
+        deserializeDataForHeader(*(&receivedData));
+
+        unsigned int offset = sizeof(packetHeader);
+        loginInfo.username = std::string(*receivedData + offset, pktHeader.lengthOfUsername);
+        offset += pktHeader.lengthOfUsername;
+        loginInfo.hashedPassword = std::string(*receivedData + offset, pktHeader.lengthOfHashedPassword);
+
+        return loginInfo;
+    }
+
+    logUpOwners deserializeDataForLogUpSellers(char** receivedData)
+    {
+        deserializeDataForHeader(*(&receivedData));
 
         unsigned int offset = sizeof(packetHeader);
         lUOwners.firstName = std::string(*receivedData + offset, pktHeader.lengthOfName);
@@ -361,27 +469,28 @@ public:
         return lUOwners;
     }
 
-
-    char* serializeDataForPost(unsigned int* totalSize)
+    logUpAdopters deserializeDataForAdopters(char** receivedData)
     {
-        *totalSize = sizeof(packetHeader) + pktHeader.lengthOfPostTitle + pktHeader.lengthOfPostContent;
-        dataToBeSent = new char[*totalSize];
-        unsigned int offset = 0;
+        deserializeDataForHeader(*(&receivedData));
 
-        memset(dataToBeSent, 0, *totalSize);
+        unsigned int offset = sizeof(packetHeader);
 
-        memcpy(dataToBeSent, &pktHeader, sizeof(packetHeader));
-        offset += sizeof(packetHeader);
+        lUAdopters.firstName  = std::string(*receivedData + offset, pktHeader.lengthOfName);
+        offset += pktHeader.lengthOfName;
 
-        memcpy(dataToBeSent + offset, postParams.postTitle.c_str(), pktHeader.lengthOfPostTitle);
-        offset += pktHeader.lengthOfPostTitle;
+        lUAdopters.lastName = std::string(*receivedData + offset, pktHeader.lengthOfLastName);
+        offset += pktHeader.lengthOfLastName;
 
-        memcpy(dataToBeSent + offset, postParams.postContent.c_str(), pktHeader.lengthOfPostContent);
-        offset += pktHeader.lengthOfPostContent;
+        lUAdopters.username = std::string(*receivedData + offset, pktHeader.lengthOfUsername);
+        offset += pktHeader.lengthOfUsername;
 
-        memcpy(dataToBeSent + offset, postParams.imageBuffer, pktHeader.sizeOfImageBuffer);
+        lUAdopters.hashedPassword = std::string(*receivedData + offset, pktHeader.lengthOfHashedPassword);
+        offset += pktHeader.lengthOfHashedPassword;
 
-        return dataToBeSent;
+        lUAdopters.userBio = std::string(*receivedData + offset, pktHeader.lengthOfAdopterBio);
+        offset += pktHeader.lengthOfAdopterBio;
+
+        return lUAdopters;
     }
 
     postParameters deserializeDataForPost(const char* receivedData)
