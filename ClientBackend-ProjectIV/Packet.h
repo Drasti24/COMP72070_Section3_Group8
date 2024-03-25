@@ -74,9 +74,9 @@ public:
     Packet(std::string username, std::string hashedPassword)
     {
         this->loginInfo.username = username;
-        // this->loginInfo.username += '\0';
+        this->loginInfo.username += '\0';
         this->loginInfo.hashedPassword = hashedPassword;
-        // this->loginInfo.hashedPassword += '\0';
+        this->loginInfo.hashedPassword += '\0';
         /*
         * After setting the attributes from received object data,
         * we must tell the header what the sizes of each data type is.
@@ -173,6 +173,28 @@ public:
         return dataToBeSent;
     }
 
+    char* serializeDataForPetInformation(unsigned int* totalSize)
+    {
+        if (this->dataToBeSent) {
+            delete this->dataToBeSent;
+        }
+        *totalSize = sizeof(packetHeader) + pktHeader.animalTypeParam + pktHeader.boolSize + pktHeader.ageSize;
+        dataToBeSent = new char[*totalSize];
+
+        memset(dataToBeSent, 0, *totalSize);
+
+        memcpy(dataToBeSent, &pktHeader, sizeof(packetHeader));
+        unsigned int offset = sizeof(packetHeader);
+        memcpy(dataToBeSent + offset, &petInfo.animalType, pktHeader.animalTypeParam);
+        offset += pktHeader.animalTypeParam;
+        memcpy(dataToBeSent + offset, &petInfo.vaccinationStatus, pktHeader.boolSize);
+        offset += pktHeader.boolSize;
+        memcpy(dataToBeSent + offset, &petInfo.age, pktHeader.ageSize);
+        offset += pktHeader.ageSize;
+
+        return dataToBeSent;
+    }
+
     loginInformation deserializeDataForLogin(char** receivedData)
     {
         memcpy(&pktHeader, *receivedData, sizeof(packetHeader));
@@ -183,6 +205,13 @@ public:
         loginInfo.hashedPassword = std::string(*receivedData + offset, pktHeader.lengthOfHashedPassword);
 
         return loginInfo;
+    }
+
+    packetHeader deserializeDataForHeader(char** receivedData)
+    {
+        memcpy(&pktHeader, *receivedData, sizeof(packetHeader));
+
+        return pktHeader;
     }
 
     char* serializeDataForLogUp(unsigned int* totalSize)
@@ -269,6 +298,7 @@ public:
 
         memcpy(&lUOwners.licenseNumber, *receivedData + offset, sizeof(lUOwners.licenseNumber));
 
+        // Not needed.
         // deserializeDataForPetInformation(offset, &(*receivedData));
 
         return lUOwners;
@@ -299,7 +329,6 @@ public:
 
     postParameters deserializeDataForPost(const char* receivedData)
     {
-
         unsigned int offset = sizeof(packetHeader);
         postParams.postTitle = std::string(receivedData + offset, pktHeader.lengthOfPostTitle);
         offset += pktHeader.lengthOfPostTitle;
@@ -312,8 +341,11 @@ public:
         return postParams;
     }
 
-    petInformation deserializeDataForPetInformation(unsigned int offset, char** receivedData)
+    petInformation deserializeDataForPetInformation(char** receivedData)
     {
+        memcpy(&pktHeader, *receivedData, sizeof(packetHeader));
+        unsigned int offset = sizeof(packetHeader);
+
         memcpy(&petInfo.animalType, *receivedData + offset, pktHeader.animalTypeParam);
         offset += pktHeader.animalTypeParam;
 
