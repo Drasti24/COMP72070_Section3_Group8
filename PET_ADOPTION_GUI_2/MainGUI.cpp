@@ -4,6 +4,8 @@
 #include "petadopterprofilewindow.h"
 #include "petinfowindow.h"
 #include "postpagewindow.h"
+#include "commonloginwindow.h"
+#include "welcomewindow.h"
 
 #include <QApplication>
 
@@ -11,22 +13,27 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     // Create instances of both windows
-    PetAdopterWindow PetAdopterLoginWindow; //this is actually for PetADopterWindow.h the login window
-    PetSellerWindow PetSellerLoginWindow;
+    PetAdopterWindow PetAdopterSignUpWindow; //this is actually for PetADopterWindow.h the sign up window
+    PetSellerWindow PetSellerSignUpWindow;
     PetSellerProfileWindow PetSellerProfileWindow;
     PetAdopterProfileWindow PetAdopterProfileWindow;
-    PetInfoWindow PetInfoLoginWindow;
+    PetInfoWindow PetInfoSignUpWindow;
     PostPageWindow PostsHomePage1;
     PostPageWindow PostsHomePage2;
+    CommonLoginWindow LogIn;
+    WelcomeWindow welcome;
 
     // Show both windows
     PostsHomePage1.show();
     PetAdopterProfileWindow.show();
-    PetAdopterLoginWindow.show();
+    PetAdopterSignUpWindow.show();
 
     PostsHomePage2.show();
     PetSellerProfileWindow.show();
-    PetInfoLoginWindow.show();
-    PetSellerLoginWindow.show();
+    PetInfoSignUpWindow.show();
+    PetSellerSignUpWindow.show();
+    LogIn.show();
+    welcome.show();
+
     return a.exec();
 }
