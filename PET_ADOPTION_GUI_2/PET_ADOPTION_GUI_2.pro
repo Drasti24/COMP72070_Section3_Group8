@@ -37,11 +37,13 @@ SOURCES += \
     PetSeller.cpp \
     ProvinceEnum.cpp \
     UserProfile.cpp \
+    commonloginwindow.cpp \
     pet_seller_window.cpp \
     petadopterprofilewindow.cpp \
     petinfowindow.cpp \
     petsellerprofilewindow.cpp \
-    postpagewindow.cpp
+    postpagewindow.cpp \
+    welcomewindow.cpp
 
 HEADERS += \
     Login.h \
@@ -53,19 +55,23 @@ HEADERS += \
     PetSeller.h \
     ProvinceEnum.h \
     UserProfile.h \
+    commonloginwindow.h \
     pet_seller_window.h \
     petadopterprofilewindow.h \
     petinfowindow.h \
     petsellerprofilewindow.h \
-    postpagewindow.h
+    postpagewindow.h \
+    welcomewindow.h
 
 FORMS += \
     PetAdopterWindow.ui \
+    commonloginwindow.ui \
     pet_seller_window.ui \
     petadopterprofilewindow.ui \
     petinfowindow.ui \
     petsellerprofilewindow.ui \
-    postpagewindow.ui
+    postpagewindow.ui \
+    welcomewindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
