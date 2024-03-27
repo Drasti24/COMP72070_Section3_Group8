@@ -22,6 +22,12 @@ PetInfoWindow::PetInfoWindow(QWidget *parent)
     vaccinationGroup->addButton(ui->radioNo);
     vaccinationGroup->addButton(ui->radioSome);
 
+    //Create button group for animal ages radio buttons
+    animalAgeGroup = new QButtonGroup(this);
+    animalAgeGroup->addButton(ui->radio02years);
+    animalAgeGroup->addButton(ui->radio35years);
+    animalAgeGroup->addButton(ui->radioOver5years);
+
     pushButtonCancel = findChild<QPushButton*>("pushButtonCancel");
     connect(pushButtonCancel, &QPushButton::clicked, this, &PetInfoWindow::cancelClicked);
 
@@ -43,25 +49,63 @@ PetInfoWindow::~PetInfoWindow()
 void PetInfoWindow::petInfoSubmitButtonClicked()
 {
     QAbstractButton *animalButton = animalGroup->checkedButton();
-
-    //collects for animal type info
+    QAbstractButton *ageButton = animalAgeGroup->checkedButton();
+    QAbstractButton *vacButton = vaccinationGroup->checkedButton();
+    //collects for animal type info from radio buttons
     if (animalButton == ui->radioDogs)
     {
         // Packet pkt;
         // pkt.petInfo.animalType = 0;
-        cout << "Dog is 0" << endl;
+        cout << "Seller has dog only inventory" << endl;
     }
     else if (animalButton == ui->radioCats)
     {
         // Packet pkt;
         // pkt.petInfo.animalType = 1;
-        cout << "Cat is 1" << endl;
+        cout << "Seller has cat only inventory" << endl;
     }
     else if (animalButton == ui->radioBoth)
     {
         // Packet pkt;
         // pkt.petInfo.animalType = 2;
-        cout << "Both is 2" << endl;
+        cout << "Seller has both in inventory" << endl;
     }
+
+    //collects vaccination info from radio buttons
+    if(vacButton == ui->radioYes)
+    {
+        //Packet pkt;
+        //pkt.vaccinationStatus = 1; {GET ACCURATE INFO FROM SALAH}
+        cout << "They are all vaccinated" << endl;
+    }
+    else if(vacButton == ui->radioNo){
+        //Packet pkt;
+        //pkt.vaccinationStatus = 1; {GET ACCURATE INFO FROM SALAH}
+        cout << "They are not vaccinated" << endl;
+    }
+    else if(vacButton == ui->radioSome){
+        //Packet pkt;
+        //pkt.vaccinationStatus = 1; {GET ACCURATE INFO FROM SALAH}
+        cout << "Some are vaccinated" << endl;
+    }
+
+    //collects age info from radio buttons
+    if(ageButton == ui->radio02years)
+    {
+        //Packet pkt;
+        //pkt.age = 02; {GET ACCURATE INFO FROM SALAH}
+        cout << "Their age is between 0 to 2 years" << endl;
+    }
+    else if(ageButton == ui->radio35years){
+        //Packet pkt;
+        //pkt.age = 35; {GET ACCURATE INFO FROM SALAH}
+        cout << "Their age is between 3 to 5 years" << endl;
+    }
+    else if(ageButton == ui->radioOver5years){
+        //Packet pkt;
+        //pkt.age = 5; {GET ACCURATE INFO FROM SALAH}
+        cout << "Their age is over 5 years" << endl;
+    }
+
     this->close();
 }
