@@ -16,8 +16,12 @@ public:
     PetAdopterWindow(QWidget *parent = nullptr);
     ~PetAdopterWindow();
 
+signals:
+    void submitProfileData(const QString &firstName, const QString &lastName, const QString &userName, const QString &bio);
+
 private slots:
     void cancelClicked(); // Declaration for the cancelClicked slot
+    void submitButtonClicked();
 
 private:
     Ui::PetAdopterWindow *ui;
