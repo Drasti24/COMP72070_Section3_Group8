@@ -1,9 +1,12 @@
 // All additional dependencies included within Packet header.
 #include "Packet.h"
+#include "Database.h"
 
 
 int main(void)
 {
+	connectToDatabase();
+
 	// Initializing Windows DLLs;
 	WSADATA wsaData;
 	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0)
@@ -102,10 +105,10 @@ int main(void)
 		}
 		else if (type == LOGUP) {
 			
-			receivedPacket.deserializeDataForLogUp(&RxBuffer);
+			receivedPacket.deserializeDataForLogUpSellers(&RxBuffer);
 		}
 		else if (type == POST) {
-			receivedPacket.deserializeDataForPost(RxBuffer);
+			receivedPacket.deserializeDataForPost(&RxBuffer);
 		}
 	}
 	closesocket(connectionSocket);

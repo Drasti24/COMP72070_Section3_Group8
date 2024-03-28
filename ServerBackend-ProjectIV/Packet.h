@@ -121,9 +121,9 @@ public:
     Packet(std::string username, std::string hashedPassword)
     {
         this->loginInfo.username = username;
-        this->loginInfo.username += '\0';
+        // this->loginInfo.username += '\0';
         this->loginInfo.hashedPassword = hashedPassword;
-        this->loginInfo.hashedPassword += '\0';
+        // this->loginInfo.hashedPassword += '\0';
         /*
         * After setting the attributes from received object data,
         * we must tell the header what the sizes of each data type is.
@@ -493,16 +493,16 @@ public:
         return lUAdopters;
     }
 
-    postParameters deserializeDataForPost(const char* receivedData)
+    postParameters deserializeDataForPost(char** receivedData)
     {
         unsigned int offset = sizeof(packetHeader);
-        postParams.postTitle = std::string(receivedData + offset, pktHeader.lengthOfPostTitle);
+        postParams.postTitle = std::string(*receivedData + offset, pktHeader.lengthOfPostTitle);
         offset += pktHeader.lengthOfPostTitle;
 
-        postParams.postContent = std::string(receivedData + offset, pktHeader.lengthOfPostContent);
+        postParams.postContent = std::string(*receivedData + offset, pktHeader.lengthOfPostContent);
         offset += pktHeader.lengthOfPostContent;
 
-        memcpy(postParams.imageBuffer, receivedData + offset, pktHeader.sizeOfImageBuffer);
+        memcpy(postParams.imageBuffer, *receivedData + offset, pktHeader.sizeOfImageBuffer);
 
         return postParams;
     }
@@ -523,5 +523,4 @@ public:
 
         return petInfo;
     }
-
 };

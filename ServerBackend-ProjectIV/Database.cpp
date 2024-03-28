@@ -1,19 +1,5 @@
 #include "Packet.h"
-#include <mysql_connection.h>            
-#include <cppconn/driver.h>             
-#include <cppconn/exception.h>           
-#include <sstream>   
-#include <cppconn/prepared_statement.h>  
-/*
-* 
-* File to be populated by Yinus.
-* 
-* Please complete function declarations and save the data on
-* the database accordingly.
-* 
-* Remeber to use MySQL connector and connect to your database
-* using required credentials.
-*/
+#include "Database.h"
 
 // Function to establish a connection to the MySQL database
 
@@ -23,7 +9,7 @@ sql::Connection* connectToDatabase() {
 
 	try {
 		driver = get_driver_instance();
-		conn = driver->connect("tcp://localhost:3306", "username", "password");
+		conn = driver->connect("tcp://localhost:3306", "username", "dbpwd3987.dac");
 		conn->setSchema("database");
 	}
 	catch (sql::SQLException& e) {
