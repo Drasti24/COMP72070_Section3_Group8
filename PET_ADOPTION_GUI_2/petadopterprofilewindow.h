@@ -39,6 +39,12 @@ public:
     PetAdopterProfileWindow(QWidget *parent = nullptr);
     ~PetAdopterProfileWindow();
 
+public slots:
+    void setProfileData(const QString &firstName, const QString &lastName, const QString &userName, const QString &bio);
+
+public slots:
+    void updateProfile(const QString &firstName, const QString &lastName, const QString &userName, const QString &bio);
+
 private slots:
     void openImage();
 
