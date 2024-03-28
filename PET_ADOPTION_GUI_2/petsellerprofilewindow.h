@@ -39,6 +39,10 @@ public:
     PetSellerProfileWindow(QWidget *parent = nullptr);
     ~PetSellerProfileWindow();
 
+public slots:
+    void updateProfile(const QString &username, const QString &businessLocation, const QString &province);
+
+
     void setProfileInfo(const QString& username, const QString& businessLocation, const QString& province);
 
 private slots:
