@@ -56,6 +56,16 @@ void PetSellerProfileWindow::openProfilePicture()
     }
 }
 
+void PetSellerProfileWindow::updateProfile(const QString &username, const QString &businessLocation, const QString &province)
+{
+    // Set the text of the profile window's labels, etc.
+    ui->labelUsernameValue->setText(username);
+    ui->labelBusinessLocationValue->setText(businessLocation);
+    ui->labelProvinceValue->setText(province);
+
+    // ... other updates as needed ...
+}
+
 void PetSellerProfileWindow::openPostPicture()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
