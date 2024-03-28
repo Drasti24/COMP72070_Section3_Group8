@@ -1,17 +1,14 @@
 #include "PetAdopterWindow.h"
 #include "ui_PetAdopterWindow.h"
-
+using namespace std;
 PetAdopterWindow::PetAdopterWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PetAdopterWindow)
 {
     ui->setupUi(this);
-
-    pushButtonCancel = findChild<QPushButton*>("pushButtonCancel");
-    connect(pushButtonCancel, &QPushButton::clicked, this, &PetAdopterWindow::cancelClicked);
-
-    // pushButtonSubmit = findChild<QPushButton*>("pushButtonSubmit");
-    // connect(pushButtonSubmit, &QPushButton::clicked,this, &MainWindow::submitButtonClicked);
+    // No need to findChild as you have direct access to the ui elements
+    connect(ui->pushButtonCancel, &QPushButton::clicked, this, &PetAdopterWindow::cancelClicked);
+    connect(ui->pushButtonSubmit, &QPushButton::clicked, this, &PetAdopterWindow::submitButtonClicked);
 }
 
 PetAdopterWindow::~PetAdopterWindow()
@@ -21,12 +18,20 @@ PetAdopterWindow::~PetAdopterWindow()
 
 void PetAdopterWindow::cancelClicked()
 {
-    // Implement cancel functionality here
     this->close();
 }
 
-// void MainWindow::submitButtonClicked()
-// {
-//     // Implement submit functionality here
-//     // For example, validate input and proceed
-// }
+void PetAdopterWindow::submitButtonClicked()
+{
+
+
+    QString Fname = ui->lineEditFirstName->text();
+    QString Lname = ui->lineEditLastName->text();
+    QString Uname = ui->lineEditUsername->text();
+    QString bio = ui->lineEditBio->text();
+
+    emit submitProfileData(Fname,Lname,Uname,bio);
+
+    this->close();
+}
+
