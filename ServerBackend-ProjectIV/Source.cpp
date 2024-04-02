@@ -1,11 +1,10 @@
 // All additional dependencies included within Packet header.
 #include "Packet.h"
-#include "Database.h"
 
 
 int main(void)
 {
-	connectToDatabase();
+	// connectToDatabase();
 
 	// Initializing Windows DLLs;
 	WSADATA wsaData;
