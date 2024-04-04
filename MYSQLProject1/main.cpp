@@ -111,7 +111,7 @@ void savePostData(Packet::postParameters& postParams)
         pstmt->setString(1, postParams.postTitle);
         pstmt->setString(2, postParams.postContent);
 
-        // Convert imageBuffer to std::istream
+        // Convert imageBuffer to std::isteream
         std::istringstream imageStream(postParams.imageBuffer);
         pstmt->setBlob(3, &imageStream);
 
