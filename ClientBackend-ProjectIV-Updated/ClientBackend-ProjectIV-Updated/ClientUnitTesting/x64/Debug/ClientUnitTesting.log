@@ -1,0 +1,39 @@
+﻿  ClientUnitTesting.cpp
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(88,59): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(89,71): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(112,56): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(113,59): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(114,59): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(115,71): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(116,59): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(117,63): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(118,73): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(149,61): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(150,65): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV\Packet.h(170,44): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  (compiling source file '/ClientUnitTesting.cpp')
+  
+     Creating library C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\x64\Debug\ClientUnitTesting.lib and object C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\x64\Debug\ClientUnitTesting.exp
+  ClientUnitTesting.vcxproj -> C:\Users\Owner\Downloads\ClientBackend-ProjectIV-Updated\ClientBackend-ProjectIV-Updated\x64\Debug\ClientUnitTesting.dll
