@@ -541,6 +541,107 @@ namespace ClientUnitTesting
 				
 			}
 
+		// Additional Testing from Yinus for full code coverage
+			TEST_METHOD(SetUserProfileUsername_Empty)
+			{
+				// Arrange
+				UserProfileViewer userProfile;
+
+				// Act
+				userProfile.setUsername("");
+
+				// Assert
+				Assert::AreEqual(std::string(""), userProfile.getUsername());
+			}
+
+			TEST_METHOD(SetUserProfileFirstName_Empty)
+			{
+				// Arrange
+				UserProfileViewer userProfile;
+
+				// Act
+				userProfile.setFirstName("");
+
+				// Assert
+				Assert::AreEqual(std::string(""), userProfile.getFirstName());
+			}
+
+			TEST_METHOD(SetUserProfileLastName_Empty)
+			{
+				// Arrange
+				UserProfileViewer userProfile;
+
+				// Act
+				userProfile.setLastName("");
+
+				// Assert
+				Assert::AreEqual(std::string(""), userProfile.getLastName());
+			}
+
+			TEST_METHOD(SetBusinessLocation_Boundary_Valid)
+			{
+				// Arrange
+				PetSeller seller;
+				std::string boundaryLocation = std::string(100, 'a');  // Exactly at the maximum valid length
+
+				// Act
+				seller.setBusinessLocation(boundaryLocation);
+
+				// Assert
+				Assert::AreEqual(boundaryLocation, seller.getBusinessLocation());
+			}
+
+			TEST_METHOD(SetPostalCode_Boundary_Valid)
+			{
+				// Arrange
+				PetSeller seller;
+				std::string boundaryPostalCode = "M5W1E6";  
+
+				// Act
+				seller.setPostalCode(boundaryPostalCode);
+
+				// Assert
+				Assert::AreEqual(boundaryPostalCode, seller.getPostalCode());
+			}
+
+			TEST_METHOD(SetPhoneNumber_Boundary_Valid)
+			{
+				// Arrange
+				PetSeller seller;
+				std::string boundaryPhoneNumber = "1234567890";  // Exactly at the maximum valid length
+
+				// Act
+				seller.setPhoneNumber(boundaryPhoneNumber);
+
+				// Assert
+				Assert::AreEqual(boundaryPhoneNumber, seller.getPhoneNumber());
+			}
+
+			TEST_METHOD(SetUsername_Boundary_Valid)
+			{
+				// Arrange
+				PetSeller seller;
+				std::string boundaryUsername = std::string(50, 'a');  // Exactly at the maximum valid length
+
+				// Act
+				seller.setUsername(boundaryUsername);
+
+				// Assert
+				Assert::AreEqual(boundaryUsername, seller.getUsername());
+			}
+
+			TEST_METHOD(SetPassword_Boundary_Valid)
+			{
+				// Arrange
+				PetSeller seller;
+				std::string boundaryPassword = std::string(100, 'a');  // Exactly at the maximum valid length
+
+				// Act
+				seller.setPassword(boundaryPassword);
+
+				// Assert
+				Assert::AreEqual(boundaryPassword, seller.getPassword());
+			}
 
 
 
