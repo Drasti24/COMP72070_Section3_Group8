@@ -1,10 +1,22 @@
 // All additional dependencies included within Packet header.
 #include "Packet.h"
+#include "Data.h"
 
 
 int main(void)
 {
-	// connectToDatabase();
+	/*
+	* File must be validated
+	* before the server starts, as it is
+	* imperative to read/write to the "database".
+	*/
+	csvFileCheck();
+
+	Packet packet;
+	Packet::loginInformation loginParams;
+	loginParams.username = "Tom";
+	loginParams.hashedPassword = "Perkins";
+	writeLogInParams(loginParams);
 
 	// Initializing Windows DLLs;
 	WSADATA wsaData;
@@ -75,8 +87,6 @@ int main(void)
 	std::cout << "Second client has been successfully connected." << std::endl;
 
 	std::cout << "Both clients are now properly connected." << std::endl;
-
-	system("pause");
 
 	char* RxBuffer = new char[1024];
 

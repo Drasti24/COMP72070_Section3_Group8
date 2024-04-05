@@ -214,12 +214,49 @@ public:
         return fileSize;
     }
 
+    bool convertBinaryToImage(const char* buffer, size_t bufferSize, const std::string& outputPath)
+    {
+        std::ofstream outputFile(outputPath, std::ios::binary);
+        if (!outputFile.is_open()) {
+            std::cerr << "Error opening output file" << std::endl;
+            return false;
+        }
+
+        outputFile.write(buffer, bufferSize); // Write the binary data to the output file
+        outputFile.close();
+
+        return true;
+    }
+    /*
+    * These two functions convert from an image file.
+    * to binary, then from binary back to an image.
+    */
+
+    char* convertImageToBinary(const std::string& imagePath, size_t& imageSize)
+    {
+        std::ifstream imageFile(imagePath, std::ios::binary | std::ios::ate);
+        if (!imageFile.is_open()) {
+            std::cerr << "Error opening image file" << std::endl;
+            return nullptr;
+        }
+
+        imageSize = imageFile.tellg(); // Get the size of the image file
+        imageFile.seekg(0, std::ios::beg); // Move back to the beginning of the file
+
+        char* buffer = new char[imageSize];
+        imageFile.read(buffer, imageSize); // Read the entire file into the buffer
+        imageFile.close();
+
+        return buffer;
+    }
+
     Packet(std::string postTitle, std::string postContent, char* imageBuffer)
     {
         this->postParams.postTitle = postTitle;
         this->postParams.postContent = postContent;
         this->pktHeader.sizeOfImageBuffer = imageData(imageBuffer);
         this->postParams.imageBuffer = new char[this->pktHeader.sizeOfImageBuffer];
+        std::memcpy(this->postParams.imageBuffer, imageBuffer, this->pktHeader.sizeOfImageBuffer);
 
         this->pktHeader.reqType = POST;
         this->pktHeader.lengthOfPostTitle = postTitle.length();
