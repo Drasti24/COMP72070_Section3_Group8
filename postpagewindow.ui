@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PostPageWindow</class>
+ <widget class="QMainWindow" name="PostPageWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+   <property name="windowTitle">
+    <string>Home</string>
+   </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="imageLabel1">
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Image 1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="imageLabel2">
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Image 2</string>
+        </property>
+       </widget>
+      </item>
+      <!-- Add more items for additional images as needed -->
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="captionLabel1">
+        <property name="text">
+         <string>Caption here...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="captionLabel2">
+        <property name="text">
+         <string>Caption here...</string>
+        </property>
+       </widget>
+      </item>
+      <!-- Add more items for additional captions as needed -->
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
