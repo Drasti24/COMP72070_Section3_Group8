@@ -64,3 +64,4 @@ void writeUserPosts(Packet::postParameters& postParams)
 	myFile.close();
 
 }
+

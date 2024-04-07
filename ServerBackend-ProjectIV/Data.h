@@ -15,3 +15,4 @@ void writeLogInParams(Packet::loginInformation&);
 void writeLogUpOwnersParams(Packet::logUpOwners&);
 void writeLogUpAdoptersParams(Packet::logUpAdopters&);
 void writeUserPosts(Packet::postParameters&);
+void checkLoginparams(Packet::loginInformation&);
