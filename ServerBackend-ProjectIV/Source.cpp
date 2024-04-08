@@ -113,9 +113,12 @@ int main(void)
 			
 			receivedPacket.deserializeDataForLogin(&RxBuffer);
 		}
-		else if (type == LOGUP) {
+		else if (type == LOGUP_ADOPTER) {
 			
 			receivedPacket.deserializeDataForLogUpSellers(&RxBuffer);
+		}
+		else if (type == LOGUP_SELLER) {
+
 		}
 		else if (type == POST) {
 			receivedPacket.deserializeDataForPost(&RxBuffer);
