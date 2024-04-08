@@ -479,6 +479,17 @@ public:
         return dataToBeSent;
     }
 
+    loginState deserializeDataForLogInState(char** receivedData)
+    {
+        deserializeDataForHeader(*(&receivedData));
+
+        unsigned int offset = sizeof(packetHeader);
+
+        memcpy(&lnState.logInStatus, *receivedData, pktHeader.boolSize);
+
+        return lnState;
+    }
+
     /*
     * IMPORTANT: Call this function on both client and server to know what the receiving end
     * will be processing (what action the user wants to take). Failure to call this function
