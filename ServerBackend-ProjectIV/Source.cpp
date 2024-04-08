@@ -100,7 +100,7 @@ int main(void)
             Packet::loginInformation loginInfo = receivedPacket.deserializeDataForLogin(&RxBuffer);
             writeLogInStats(loginInfo);
             // Check whether user exists, or credentials match.
-            checkLogInParams(loginInfo, logInState);
+            logInState = checkLogInParams(loginInfo);
 
             if (logInState == true)
             {

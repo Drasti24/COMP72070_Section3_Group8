@@ -163,39 +163,7 @@ namespace ServerBackendProjectIVTest
             // Clean up
             delete[] serializedData;
         }
-
-        //TEST_METHOD(TestDeserializeDataForPetInformation)
-        //{
-        //    // Create a petInformation object
-        //    Packet::petInformation originalPet;
-        //    originalPet.animalType = 1; // Set to a known value
-        //    originalPet.vaccinationStatus = true; // Set to a known value
-        //    originalPet.age = 5; // Set to a known value
-
-        //    // Serialize the petInformation object into a buffer
-        //    unsigned int totalSize = sizeof(originalPet.animalType) + sizeof(originalPet.vaccinationStatus) + sizeof(originalPet.age);
-        //    char* serializedData = new char[totalSize];
-        //    unsigned int offset = 0;
-        //    memcpy(serializedData + offset, &originalPet.animalType, sizeof(originalPet.animalType));
-        //    offset += sizeof(originalPet.animalType);
-        //    memcpy(serializedData + offset, &originalPet.vaccinationStatus, sizeof(originalPet.vaccinationStatus));
-        //    offset += sizeof(originalPet.vaccinationStatus);
-        //    memcpy(serializedData + offset, &originalPet.age, sizeof(originalPet.age));
-
-        //    // Call the function to deserialize the data
-        //    Packet packet; // Create a Packet object
-        //    offset = 0; // Reset offset
-        //    Packet::petInformation deserializedPet = packet.deserializeDataForPetInformation(&serializedData);
-
-        //    // Check the deserialized petInformation object
-        //    Assert::AreEqual((int)originalPet.animalType, (int)deserializedPet.animalType, L"Animal type is incorrect");
-        //    Assert::AreEqual(originalPet.vaccinationStatus, deserializedPet.vaccinationStatus, L"Vaccination status is incorrect");
-        //    Assert::AreEqual((int)originalPet.age, (int)deserializedPet.age, L"Age is incorrect");
-
-        //    // Clean up
-        //    delete[] serializedData;
-        //}
-
+              
         TEST_METHOD(TestSerializeDataForLogUpAdopters)
         {
             // Initialize the Packet object with mock data
@@ -434,6 +402,81 @@ namespace ServerBackendProjectIVTest
             // Clean up
             delete[] serializedData;
         }
+
+        TEST_METHOD(TestSerializeAndDeserializeLogin)
+        {
+            // Arrange - Create original login information
+            std::string originalUsername = "userTest";
+            std::string originalPassword = "passTest";
+            Packet packet(originalUsername, originalPassword);
+
+            // Act - Serialize and then deserialize the login information
+            unsigned int totalSize = 0;
+            char* serializedData = packet.serializeDataForLogin(&totalSize);
+
+            // Now simulate receiving this data and deserializing it
+            Packet receivedPacket;
+            receivedPacket.deserializeDataForHeader(&serializedData); // Assuming this sets up the packet for further deserialization
+            Packet::loginInformation deserializedLoginInfo = receivedPacket.deserializeDataForLogin(&serializedData);
+
+            // Assert - Verify that deserialized data matches the original
+            Assert::AreEqual(originalUsername, deserializedLoginInfo.username, L"Deserialized username does not match original");
+            Assert::AreEqual(originalPassword, deserializedLoginInfo.hashedPassword, L"Deserialized password does not match original");
+
+            // Clean up
+            delete[] serializedData;
+        }
+
+      
+        TEST_METHOD(TestDeserializeDataForPetInformationWithCorruption)
+        {
+            // Arrange - Create and serialize pet information with known values
+            Packet packet;
+            packet.petInfo.animalType = 1; // Correct value
+            packet.petInfo.vaccinationStatus = true; // Correct value
+            packet.petInfo.age = 5; // Correct value
+
+            unsigned int totalSize;
+            char* serializedData = packet.serializeDataForPetInformation(&totalSize);
+
+            // Ensure we allocate enough memory for the serialized data
+            char* safeSerializedData = new char[totalSize];
+            memcpy(safeSerializedData, serializedData, totalSize);
+
+            // Clean up the original serialized data
+            delete[] serializedData;
+
+            // Act - Intentionally corrupt the serialized data (e.g., animalType)
+            // Ensure the offset to animalType is correctly calculated based on your packet structure
+            size_t offsetToAnimalType = sizeof(Packet::packetHeader); // Adjust if there's other data before animalType
+            *(reinterpret_cast<unsigned int*>(safeSerializedData + offsetToAnimalType)) = 999; // Incorrect animal type
+
+            // Attempt to deserialize the corrupted data
+            Packet::petInformation deserializedPetInfo;
+            bool deserializationSuccess = true;
+            try {
+                char* dataPointer = safeSerializedData;
+                deserializedPetInfo = packet.deserializeDataForPetInformation(&dataPointer);
+
+                // Assert - Check if the deserialization process incorrectly accepted the corrupted value
+                Assert::AreNotEqual(999, (int)deserializedPetInfo.animalType, L"Deserialization accepted corrupted animal type");
+            }
+            catch (std::exception& e) {
+                // If an exception is expected and desirable, pass the test
+                Logger::WriteMessage("Deserialization correctly failed with exception: ");
+                Logger::WriteMessage(e.what());
+                deserializationSuccess = false;
+            }
+
+            // If no exception was thrown, ensure the corrupted value was not accepted
+            Assert::IsFalse(deserializationSuccess, L"Deserialization should have failed but it succeeded.");
+
+            // Clean up
+            delete[] safeSerializedData;
+        }
+
+     
+
 
 
     };

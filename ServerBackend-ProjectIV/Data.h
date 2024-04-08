@@ -17,4 +17,4 @@ void writeLogUpAdoptersParams(Packet::logUpAdopters&);
 void writeUserPosts(Packet::postParameters&);
 void checkLoginparams(Packet::loginInformation&);
 
-void checkLogInParams(Packet::loginInformation&, bool);
+bool checkLogInParams(Packet::loginInformation&);

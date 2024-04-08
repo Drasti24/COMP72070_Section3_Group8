@@ -218,6 +218,8 @@ public:
 
         this->pktHeader.reqType = login_state;
         this->pktHeader.boolSize = sizeof(lnState.logInStatus);
+
+        std::cout << this->pktHeader.boolSize << std::endl;
     }
 
     /*
