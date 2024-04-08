@@ -5,6 +5,8 @@
 #include <windows.networking.sockets.h>
 #pragma comment(lib, "Ws2_32.lib")
 
+
+
 /*
 * The enumerations are used to specify the type of
 * request the client/server are expecting.
@@ -101,6 +103,11 @@ public:
         char* imageBuffer = nullptr;
     } postParams;
 
+    struct loginState
+    {
+        bool logInStatus;
+    } lnState;
+
     char* bufferOfReceivedData = nullptr;
     char* dataToBeSent = nullptr;
 
@@ -192,6 +199,27 @@ public:
         this->pktHeader.lengthOfAdopterBio = userBio.length();
     }
 
+    Packet(std::string postTitle, std::string postContent, char* imageBuffer)
+    {
+        this->postParams.postTitle = postTitle;
+        this->postParams.postContent = postContent;
+        this->pktHeader.sizeOfImageBuffer = imageData(imageBuffer);
+        this->postParams.imageBuffer = new char[this->pktHeader.sizeOfImageBuffer];
+        std::memcpy(this->postParams.imageBuffer, imageBuffer, this->pktHeader.sizeOfImageBuffer);
+
+        this->pktHeader.reqType = POST;
+        this->pktHeader.lengthOfPostTitle = postTitle.length();
+        this->pktHeader.lengthOfPostContent = postContent.length();
+    }
+
+    Packet(bool logInResult, requestType login_state)
+    {
+        this->lnState.logInStatus = logInResult;
+
+        this->pktHeader.reqType = login_state;
+        this->pktHeader.boolSize = sizeof(lnState.logInStatus);
+    }
+
     /*
     * This function is to be used by the client.
     * The client Must tell the server what the size of the image is.
@@ -256,19 +284,6 @@ public:
         return buffer;
     }
 
-    Packet(std::string postTitle, std::string postContent, char* imageBuffer)
-    {
-        this->postParams.postTitle = postTitle;
-        this->postParams.postContent = postContent;
-        this->pktHeader.sizeOfImageBuffer = imageData(imageBuffer);
-        this->postParams.imageBuffer = new char[this->pktHeader.sizeOfImageBuffer];
-        std::memcpy(this->postParams.imageBuffer, imageBuffer, this->pktHeader.sizeOfImageBuffer);
-
-        this->pktHeader.reqType = POST;
-        this->pktHeader.lengthOfPostTitle = postTitle.length();
-        this->pktHeader.lengthOfPostContent = postContent.length();
-    }
-
     /*
     * All of these functions serialize and deserialize data. The way they work is
     * by copying data back and forth from memory. When serializing, we are copying into
@@ -307,6 +322,28 @@ public:
         memcpy(dataToBeSent + offset, loginInfo.hashedPassword.c_str(), pktHeader.lengthOfHashedPassword);
 
         return dataToBeSent;
+    }
+
+    char* serializeDataForLogInState(unsigned int* totalSize)
+    {
+        if (this->dataToBeSent) {
+            delete this->dataToBeSent;
+        }
+
+        *totalSize = sizeof(packetHeader) + pktHeader.boolSize;
+
+        dataToBeSent = new char[*totalSize];
+
+        memset(dataToBeSent, 0, *totalSize);
+
+        memcpy(dataToBeSent, &pktHeader, sizeof(packetHeader));
+        unsigned int offset = sizeof(packetHeader);
+
+        memcpy(dataToBeSent + offset, &lnState.logInStatus, pktHeader.boolSize);
+        offset += pktHeader.boolSize;
+
+        return dataToBeSent;
+
     }
 
     char* serializeDataForLogUpAdopters(unsigned int* totalSize)

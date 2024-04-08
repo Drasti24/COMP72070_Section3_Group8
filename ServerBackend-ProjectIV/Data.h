@@ -1,6 +1,6 @@
 #pragma once
 #include "Packet.h"
-#include <vector>
+#include <string>
 /*
 * Written by Salah Salame on Thursday, April 4th, 2024.
 * "Data" will save data to a CSV file for recording usernames
@@ -16,3 +16,5 @@ void writeLogUpOwnersParams(Packet::logUpOwners&);
 void writeLogUpAdoptersParams(Packet::logUpAdopters&);
 void writeUserPosts(Packet::postParameters&);
 void checkLoginparams(Packet::loginInformation&);
+
+void checkLogInParams(Packet::loginInformation&, bool);

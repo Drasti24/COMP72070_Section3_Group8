@@ -65,3 +65,41 @@ void writeUserPosts(Packet::postParameters& postParams)
 
 }
 
+void checkLogInParams(Packet::loginInformation& loginParams, bool logInState)
+{
+	std::ifstream myFile("Data.csv");
+	std::string line;
+
+	while (std::getline(myFile, line, ','))
+	{
+		if (strcmp(line.c_str(), loginParams.username.c_str()))
+		{
+			std::getline(myFile, line, ',');
+			/*
+			* If the username exists, it should go to the
+			* next column to see if the password stored
+			* next to it matches.
+			* 
+			* This is what this logic is supposed to do.
+			*/
+			if (strcmp(line.c_str(), loginParams.hashedPassword.c_str()))
+			{
+				logInState = true;
+
+				std::cout << "Credentials match!" << std::endl;
+				break;
+			}
+		}
+		else
+		{
+			/*
+			* Whether or not the user credentials match,
+			* the header will contain result from
+			* evaluation.
+			*/
+			std::cout << "Credentials don't match/exist!" << std::endl;
+			break;
+		}
+	}
+}
+

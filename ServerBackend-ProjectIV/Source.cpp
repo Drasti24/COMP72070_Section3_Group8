@@ -82,6 +82,11 @@ int main(void)
 
     char* RxBuffer = new char[1024];
 
+    // Used to assess whether credentials are right are wrong.
+    bool logInState = false;
+
+    unsigned int totalSize = 0;
+
     while (1)
     {
         size_t bytesReceived = recv(connectionSocket, RxBuffer, 1024, 0);
@@ -89,18 +94,26 @@ int main(void)
         Packet receivedPacket;
         receivedPacket.deserializeDataForHeader(&RxBuffer);
         enum requestType type = receivedPacket.getRequestType();
-        if (type == LOGIN_SUCCESS)
-        {
-            // Function call.
-        }
-        if (type == LOGIN_FAIL)
-        {
-            // Function call.
-        }
+ 
         if (type == LOGIN_ACT)
         {
             Packet::loginInformation loginInfo = receivedPacket.deserializeDataForLogin(&RxBuffer);
             writeLogInStats(loginInfo);
+            // Check whether user exists, or credentials match.
+            checkLogInParams(loginInfo, logInState);
+
+            if (logInState == true)
+            {
+                Packet logInSuccess(logInState, LOGIN_SUCCESS);
+                RxBuffer = logInSuccess.serializeDataForLogInState(&totalSize);
+                send(connectionSocket, RxBuffer, totalSize, 0);
+            }
+            else
+            {
+                Packet logInFailure(logInState, LOGIN_FAIL);
+                RxBuffer = logInFailure.serializeDataForLogInState(&totalSize);
+                send(connectionSocket, RxBuffer, totalSize, 0);
+            }
         }
         if (type == LOGUP_ADOPTER)
         {
