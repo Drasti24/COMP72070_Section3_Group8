@@ -235,9 +235,6 @@ public:
 
     enum requestType getRequestType()
     {
-        std::cout << "Using this: " << this->pktHeader.reqType << std::endl;
-        std::cout << "Without this: " << pktHeader.reqType << std::endl;
-
         return this->pktHeader.reqType;
     }
 
@@ -474,9 +471,6 @@ public:
         loginInfo.username = std::string(*receivedData + offset, pktHeader.lengthOfUsername);
         offset += pktHeader.lengthOfUsername;
         loginInfo.hashedPassword = std::string(*receivedData + offset, pktHeader.lengthOfHashedPassword);
-
-        std::cout << loginInfo.username << std::endl;
-        std::cout << loginInfo.hashedPassword << std::endl;
 
         return loginInfo;
     }

@@ -1,6 +1,7 @@
 // All additional dependencies included within Packet header.
 #include "Packet.h"
 #include "Data.h"
+#include "ServerLogs.h"
 
 
 int main(void)
@@ -12,11 +13,18 @@ int main(void)
     */
     csvFileCheck();
 
-    /*Packet packet;
-    Packet::loginInformation loginParams;
-    loginParams.username = "Tom";
-    loginParams.hashedPassword = "Perkins";*/
-    // writeLogInParams(loginParams);
+    /*
+    * Server logs are always written to
+    * when new events take place.
+    * 
+    * Need to perform file validation
+    * before server starts, as it is
+    * imperative to store these events.
+    */
+
+    logFileCheck();
+
+ 
 
     // Initializing Windows DLLs;
     WSADATA wsaData;
@@ -92,9 +100,7 @@ int main(void)
         if (type == LOGIN_ACT)
         {
             Packet::loginInformation loginInfo = receivedPacket.deserializeDataForLogin(&RxBuffer);
-            //std::cout << "Receive Login Data" << std::endl;
-            //std::cout << loginInfo.username << std::endl;
-            //std::cout << loginInfo.hashedPassword << std::endl;
+            writeLogInStats(loginInfo);
         }
         if (type == LOGUP_ADOPTER)
         {
@@ -105,16 +111,18 @@ int main(void)
         {
             Packet::logUpOwners logUpOwnersInfo = receivedPacket.deserializeDataForLogUpSellers(&RxBuffer);
         }
-
+        if (type == POST)
+        {
+            Packet::postParameters postParamsInfo = receivedPacket.deserializeDataForPost(&RxBuffer);
+        }
     }
 
-    // Remember to free dynamically allocated memory before server shutdown
     delete[] RxBuffer;
+
+
     closesocket(connectionSocket);
     closesocket(serverSocket);
     WSACleanup();
-
-    // delete[] RxBuffer; // Remember to free dynamically allocated memory
 
     return 0;
 }

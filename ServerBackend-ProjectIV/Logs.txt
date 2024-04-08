@@ -1,0 +1,3 @@
+Attempted log in by user.
+Username: logfiletest
+Password: 232323
