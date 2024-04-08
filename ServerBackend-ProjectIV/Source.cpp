@@ -12,11 +12,12 @@ int main(void)
 	*/
 	csvFileCheck();
 
-	Packet packet;
-	Packet::loginInformation loginParams;
-	loginParams.username = "Tom";
-	loginParams.hashedPassword = "Perkins";
-	writeLogInParams(loginParams);
+
+	//Packet packet;
+	//Packet::loginInformation loginParams;
+	//loginParams.username = "Tom";
+	//loginParams.hashedPassword = "Perkins";
+	//writeLogInParams(loginParams);
 
 	// Initializing Windows DLLs;
 	WSADATA wsaData;
@@ -63,8 +64,8 @@ int main(void)
 	connectionSocket = SOCKET_ERROR;
 
 	// Accepting secondary client:
-	SOCKET secondaryConnectionSocket;
-	secondaryConnectionSocket = SOCKET_ERROR;
+	//SOCKET secondaryConnectionSocket;
+	//secondaryConnectionSocket = SOCKET_ERROR;
 	
 	if ((connectionSocket == accept(serverSocket, NULL, NULL)) == SOCKET_ERROR)
 	{
@@ -76,15 +77,15 @@ int main(void)
 
 	std::cout << "Primary client is connected. Waiting for secondary client." << std::endl;
 
-	if ((secondaryConnectionSocket == accept(serverSocket, NULL, NULL)) == SOCKET_ERROR)
-	{
-		std::cout << "Cannot establish a connection with the client." << std::endl;
-		closesocket(serverSocket);
-		WSACleanup();
-		return 0;
-	}
+	//if ((secondaryConnectionSocket == accept(serverSocket, NULL, NULL)) == SOCKET_ERROR)
+	//{
+	//	std::cout << "Cannot establish a connection with the client." << std::endl;
+	//	closesocket(serverSocket);
+	//	WSACleanup();
+	//	return 0;
+	//}
 
-	std::cout << "Second client has been successfully connected." << std::endl;
+	//std::cout << "Second client has been successfully connected." << std::endl;
 
 	std::cout << "Both clients are now properly connected." << std::endl;
 
@@ -98,7 +99,7 @@ int main(void)
 		* 
 		* Place send and receive calls here once packet is ready.
 		*/
-		recv(connectionSocket, RxBuffer, sizeof(RxBuffer), 0);
+		recv(connectionSocket, RxBuffer, 1024, 0);
 		enum requestType type = UNKNOWN;
 		Packet receivedPacket;
 		receivedPacket.deserializeDataForHeader(&RxBuffer);

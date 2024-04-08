@@ -15,7 +15,7 @@
 * Enumerations are defined as project specific and tell the client/server
 * what action is being done by the user.
 */
-enum requestType { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_ACT, LOGUP, POST, UNKNOWN };
+enum requestType { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_ACT, LOGUP_ADOPTER, LOGUP_SELLER, POST, UNKNOWN };
 
 class Packet
 {
@@ -155,7 +155,7 @@ public:
         this->petInfo.vaccinationStatus = vaccinationStatus;
         this->petInfo.age = age;
 
-        this->pktHeader.reqType = LOGUP;
+        this->pktHeader.reqType = LOGUP_SELLER;
         this->pktHeader.lengthOfName = firstName.length();
         this->pktHeader.lengthOfLastName = lastName.length();
         this->pktHeader.lengthOfUsername = username.length();
@@ -186,6 +186,7 @@ public:
         * it needs to know to deserialize data by filling in
         * needed parameters within the packet header.
         */
+        this->pktHeader.reqType = LOGUP_ADOPTER;
         this->pktHeader.lengthOfUsername = username.length();
         this->pktHeader.lengthOfHashedPassword = hashedPassword.length();
         this->pktHeader.lengthOfAdopterBio = userBio.length();
