@@ -5,128 +5,116 @@
 
 int main(void)
 {
-	/*
-	* File must be validated
-	* before the server starts, as it is
-	* imperative to read/write to the "database".
-	*/
-	csvFileCheck();
+    /*
+    * File must be validated
+    * before the server starts, as it is
+    * imperative to read/write to the "database".
+    */
+    csvFileCheck();
 
+    /*Packet packet;
+    Packet::loginInformation loginParams;
+    loginParams.username = "Tom";
+    loginParams.hashedPassword = "Perkins";*/
+    // writeLogInParams(loginParams);
 
-	//Packet packet;
-	//Packet::loginInformation loginParams;
-	//loginParams.username = "Tom";
-	//loginParams.hashedPassword = "Perkins";
-	//writeLogInParams(loginParams);
+    // Initializing Windows DLLs;
+    WSADATA wsaData;
+    if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0)
+    {
+        return -1;
+    }
 
-	// Initializing Windows DLLs;
-	WSADATA wsaData;
-	if ((WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0)
-	{
-		return -1;
-	}
+    // Initialize the necessary sockets.
+    SOCKET serverSocket;
+    serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (serverSocket == INVALID_SOCKET)
+    {
+        WSACleanup();
+        return -1;
+    }
 
-	// Initialize the necessary sockets.
-	SOCKET serverSocket;
-	serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (serverSocket == INVALID_SOCKET)
-	{
-		WSACleanup();
-		return -1;
-	}
+    // Binding the socket:
+    sockaddr_in svrAddr;
+    svrAddr.sin_family = AF_INET;
+    svrAddr.sin_addr.s_addr = INADDR_ANY;
+    svrAddr.sin_port = htons(27000);
+    if (bind(serverSocket, (struct sockaddr*)&svrAddr, sizeof(svrAddr)) == SOCKET_ERROR)
+    {
+        std::cout << "Cannot bind server socket." << std::endl;
+        closesocket(serverSocket);
+        WSACleanup();
+        return -1;
+    }
 
-	// Binding the socket:
-	sockaddr_in svrAddr;
-	svrAddr.sin_family = AF_INET;
-	svrAddr.sin_addr.s_addr = INADDR_ANY;
-	svrAddr.sin_port = htons(27000);
-	if (bind(serverSocket, (struct sockaddr*)&svrAddr, sizeof(svrAddr)) == SOCKET_ERROR)
-	{
-		std::cout << "Cannot bind server socket." << std::endl;
-		closesocket(serverSocket);
-		WSACleanup();
-		return -1;
-	}
+    // Listen for incoming connections.
+    if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR)
+    {
+        std::cout << "Error listening on server socket." << std::endl;
+        closesocket(serverSocket);
+        WSACleanup();
+        return -1;
+    }
 
-	// Listen for incoming connections.
-	if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR)
-	{
-		std::cout << "Error listening on server socket." << std::endl;
-		closesocket(serverSocket);
-		WSACleanup();
-		return -1;
-	}
+    std::cout << "Waiting for primary client connection." << std::endl;
 
-	std::cout << "Waiting for primary client connection." << std::endl;
+    // Accepting client connection:
+    SOCKET connectionSocket;
+    connectionSocket = accept(serverSocket, NULL, NULL); // Corrected to remove redundant SOCKET_ERROR check
 
-	// Accepting client connection:
-	SOCKET connectionSocket;
-	connectionSocket = SOCKET_ERROR;
+    if (connectionSocket == INVALID_SOCKET)
+    {
+        std::cout << "Cannot establish a connection with the client." << std::endl;
+        closesocket(serverSocket);
+        WSACleanup();
+        return 0;
+    }
 
-	// Accepting secondary client:
-	//SOCKET secondaryConnectionSocket;
-	//secondaryConnectionSocket = SOCKET_ERROR;
-	
-	if ((connectionSocket == accept(serverSocket, NULL, NULL)) == SOCKET_ERROR)
-	{
-		std::cout << "Cannot establish a connection with the client." << std::endl;
-		closesocket(serverSocket);
-		WSACleanup();
-		return 0;
-	}
+    std::cout << "Primary client is connected." << std::endl;
 
-	std::cout << "Primary client is connected. Waiting for secondary client." << std::endl;
+    char* RxBuffer = new char[1024];
 
-	//if ((secondaryConnectionSocket == accept(serverSocket, NULL, NULL)) == SOCKET_ERROR)
-	//{
-	//	std::cout << "Cannot establish a connection with the client." << std::endl;
-	//	closesocket(serverSocket);
-	//	WSACleanup();
-	//	return 0;
-	//}
+    while (1)
+    {
+        size_t bytesReceived = recv(connectionSocket, RxBuffer, 1024, 0);
 
-	//std::cout << "Second client has been successfully connected." << std::endl;
+        Packet receivedPacket;
+        receivedPacket.deserializeDataForHeader(&RxBuffer);
+        enum requestType type = receivedPacket.getRequestType();
+        if (type == LOGIN_SUCCESS)
+        {
+            // Function call.
+        }
+        if (type == LOGIN_FAIL)
+        {
+            // Function call.
+        }
+        if (type == LOGIN_ACT)
+        {
+            Packet::loginInformation loginInfo = receivedPacket.deserializeDataForLogin(&RxBuffer);
+            //std::cout << "Receive Login Data" << std::endl;
+            //std::cout << loginInfo.username << std::endl;
+            //std::cout << loginInfo.hashedPassword << std::endl;
+        }
+        if (type == LOGUP_ADOPTER)
+        {
+            Packet::logUpAdopters logupAdoptersInfo = receivedPacket.deserializeDataForAdopters(&RxBuffer);
 
-	std::cout << "Both clients are now properly connected." << std::endl;
+        }
+        if (type == LOGUP_SELLER)
+        {
+            Packet::logUpOwners logUpOwnersInfo = receivedPacket.deserializeDataForLogUpSellers(&RxBuffer);
+        }
 
-	char* RxBuffer = new char[1024];
+    }
 
-	while (1)
-	{
-		/*
-		* Sending and receiving code pending until creation
-		* of packet has been completed.
-		* 
-		* Place send and receive calls here once packet is ready.
-		*/
-		recv(connectionSocket, RxBuffer, 1024, 0);
-		enum requestType type = UNKNOWN;
-		Packet receivedPacket;
-		receivedPacket.deserializeDataForHeader(&RxBuffer);
-		if (type == LOGIN_SUCCESS) {
-			// function call.
-		}
-		else if (type == LOGIN_FAIL) {
-			// function call.
-		}
-		else if (type == LOGIN_ACT) {
-			
-			receivedPacket.deserializeDataForLogin(&RxBuffer);
-		}
-		else if (type == LOGUP_ADOPTER) {
-			
-			receivedPacket.deserializeDataForLogUpSellers(&RxBuffer);
-		}
-		else if (type == LOGUP_SELLER) {
+    // Remember to free dynamically allocated memory before server shutdown
+    delete[] RxBuffer;
+    closesocket(connectionSocket);
+    closesocket(serverSocket);
+    WSACleanup();
 
-		}
-		else if (type == POST) {
-			receivedPacket.deserializeDataForPost(&RxBuffer);
-		}
-	}
-	closesocket(connectionSocket);
-	closesocket(serverSocket);
-	WSACleanup();
+    // delete[] RxBuffer; // Remember to free dynamically allocated memory
 
-	return 0;
+    return 0;
 }

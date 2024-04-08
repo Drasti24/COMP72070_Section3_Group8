@@ -233,6 +233,14 @@ public:
     * to binary, then from binary back to an image.
     */
 
+    enum requestType getRequestType()
+    {
+        std::cout << "Using this: " << this->pktHeader.reqType << std::endl;
+        std::cout << "Without this: " << pktHeader.reqType << std::endl;
+
+        return this->pktHeader.reqType;
+    }
+
     char* convertImageToBinary(const std::string& imagePath, size_t& imageSize)
     {
         std::ifstream imageFile(imagePath, std::ios::binary | std::ios::ate);
@@ -459,13 +467,16 @@ public:
         * Remember to call this function and pass the parameter appropriately
         * for each use case, this will prevent many issues!
         */
-
-        deserializeDataForHeader(*(&receivedData));
+        // Header is being deserialized in main.
+        // deserializeDataForHeader(*(&receivedData));
 
         unsigned int offset = sizeof(packetHeader);
         loginInfo.username = std::string(*receivedData + offset, pktHeader.lengthOfUsername);
         offset += pktHeader.lengthOfUsername;
         loginInfo.hashedPassword = std::string(*receivedData + offset, pktHeader.lengthOfHashedPassword);
+
+        std::cout << loginInfo.username << std::endl;
+        std::cout << loginInfo.hashedPassword << std::endl;
 
         return loginInfo;
     }
